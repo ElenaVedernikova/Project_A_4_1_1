@@ -1,5 +1,9 @@
 package ru.netology.delivery.test;
 
+import com.codeborne.selenide.logevents.SelenideLogger;
+import io.qameta.allure.selenide.AllureSelenide;
+import org.junit.jupiter.api.AfterAll;
+import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.Keys;
@@ -13,6 +17,11 @@ import static com.codeborne.selenide.Selenide.*;
 class DeliveryTest {
 
     final DataGenerator generator = new DataGenerator();
+
+    @BeforeAll
+    static void setUpAll() {
+        SelenideLogger.addListener("allure", new AllureSelenide());
+    }
 
     @BeforeEach
     void setUp() {
@@ -41,6 +50,11 @@ class DeliveryTest {
         $(".notification_visible .button").click();
         $("[data-test-id='success-notification']").shouldHave(exactText("Успешно! Встреча успешно запланирована на "
                 + dateNext));
+    }
+
+    @AfterAll
+    static void tearDownAll() {
+        SelenideLogger.removeListener("allure");
     }
 }
 
